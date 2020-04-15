@@ -1,0 +1,48 @@
+﻿@page "/grid1"
+@code 
+{
+		DateTime[] Data = Enumerable.Range(1, 3).Select(i => DateTime.Now.AddDays(i)).ToArray();
+}
+
+
+<h1>Customised Grid</h1>
+
+<Repeater Data=@Data>
+	<RepeaterTemplate Context="ListItems">
+		<table class="table-bordered">
+			<tr><th>Data Type</th><th>Value</th></tr>
+			@ListItems
+			<tr><th colspan="2">Using the Repeater as a table.</th></tr>
+		</table>
+	</RepeaterTemplate>
+	<RepeaterItemTemplate Context="ListFields">
+		<tr>@ListFields</tr>
+	</RepeaterItemTemplate>
+	<RepeaterField Context="DataType">
+			<td>@DataType.GetType()</td>
+	</RepeaterField>
+	<RepeaterField Context="Data">
+			<td>@Data</td>
+	</RepeaterField>
+</Repeater>
+
+<br/>
+<pre><code>@(@"<Repeater Data=@Data>
+  <RepeaterTemplate Context=""ListItems"">
+    <table class=""table-bordered"">
+      <tr><th>Data Type</th><th>Value</th></tr>
+      @ListItems
+      <tr><th colspan=""2"">Using the Repeater as a table.</th></tr>
+    </table>
+  </RepeaterTemplate>
+  <RepeaterItemTemplate Context=""ListFields"">
+    <tr>@ListFields</tr>
+  </RepeaterItemTemplate>
+  <RepeaterField Context=""DataType"">
+    <td>@DataType.GetType()</td>
+  </RepeaterField>
+  <RepeaterField Context=""Data"">
+    <td>@Data</td>
+  </RepeaterField>
+</Repeater>
+")</code></pre>

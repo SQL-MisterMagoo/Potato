@@ -1,0 +1,28 @@
+﻿@page "/custom1"
+
+@code {
+		DateTime[] Data = Enumerable.Range(1, 3).Select(i => DateTime.Now.AddDays(i)).ToArray();
+}
+
+<h1>Custom Auto List</h1>
+
+<Repeater Data=@Data>
+	<RepeaterTemplate Context="ListItem">
+		<div class="row">@ListItem</div>
+	</RepeaterTemplate>
+	<RepeaterItemTemplate Context="ListFields">
+		<div class="col m-1">@ListFields</div>
+	</RepeaterItemTemplate>
+</Repeater>
+
+<br/>
+
+<pre><code>@(@"<Repeater Data=@Data>
+  <RepeaterTemplate Context=""ListItem"">
+    <div class=""row"">@ListItem</div>
+  </RepeaterTemplate>
+  <RepeaterItemTemplate Context=""ListFields"">
+    <div class=""col m-1"">@ListFields</div>
+  </RepeaterItemTemplate>
+</Repeater>
+")</code></pre>

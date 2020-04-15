@@ -1,0 +1,97 @@
+﻿@typeparam T
+
+<h3>Repeater&lt;@typeof(T)&gt;(@(Data?.Count()) Data Items)</h3>
+
+@* ***** SET UP SOME DEFAULT RENDERFRAGMENTS ***** *@
+
+@{ 
+	if (RepeaterTemplate is null)
+	{
+			RepeaterTemplate = context =>
+			@: @{ 
+				<div class="card-columns">@context</div>
+			}
+			/**/;
+	}
+}
+
+@{ 
+	if (RepeaterItemTemplate is null)
+	{
+		RepeaterItemTemplate = context =>
+		@: @{ 
+			<div class="card bg-dark text-white m-1">
+				<div class="card-body">@context</div>
+			</div>
+		}
+		/**/;
+	}
+}
+
+@{ 
+	DefaultItem = context =>
+		@: @{ 
+		<div class="form-group row">
+			<label class="col-form-label">@context.prop.Name</label>
+			<input class="form-control" value="@context.prop.GetValue(context.data)" readonly/>
+		</div>
+		}
+/**/;
+}
+
+@* ***** THIS IS WHERE WE RENDER THE LIST ***** *@
+
+@RepeaterTemplate(
+@: @if (Data is null)
+{
+	<p>Loading...</p>
+}
+else
+{
+	foreach (var item in Data)
+	{
+		@RepeaterItemTemplate(b => {
+		 foreach (var content in _Contents)
+		 {
+			 b.AddContent(1, content(item));
+		 }
+	 })
+	}
+}
+)
+
+@* ***** THE LIST CODE - COULD GO IN CODE BEHIND BUT KEPT HERE FOR VISIBILITY ***** *@
+
+@code {
+		/****** DECLARE PARAMETERS ******/
+		[Parameter] public IEnumerable<T> Data { get; set; }
+		[Parameter] public RenderFragment<RenderFragment> RepeaterTemplate { get; set; }
+		[Parameter] public RenderFragment<RenderFragment> RepeaterItemTemplate { get; set; }
+		[Parameter] public RenderFragment<T> RepeaterField
+		{
+			get=>_Contents.LastOrDefault();
+			set
+			{
+				_Contents.Add(value);
+			}
+		}
+		List<RenderFragment<T>> _Contents { get; set; } = new List<RenderFragment<T>>();
+
+		/****** AUTOMATIC FIELDS HANDLING ******/
+
+		RenderFragment<(T data, System.Reflection.PropertyInfo prop)> DefaultItem;
+
+		protected override void OnParametersSet()
+		{
+			if (!_Contents.Any() && Data.Any())
+			{
+				foreach (var prop in typeof(T).GetProperties())
+				{
+					_Contents.Add(item => b => {
+						b.AddContent(1, DefaultItem((item,prop)));
+					});
+				}
+			}
+		}
+		/**/
+	}

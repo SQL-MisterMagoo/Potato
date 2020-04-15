@@ -1,0 +1,54 @@
+﻿@page "/custom2"
+
+@code {
+		DateTime[] Data = Enumerable.Range(1, 3).Select(i => DateTime.Now.AddDays(i)).ToArray();
+}
+
+<h1>Customised List</h1>
+
+<Repeater Data=@Data>
+	<RepeaterTemplate Context="ListItem">
+		<div class="card-columns">@ListItem</div>
+	</RepeaterTemplate>
+	<RepeaterItemTemplate Context="ListFields">
+		<div class="card border-dark mb-3" style="max-width: 18rem;"><div class="card-body">@ListFields</div></div>
+	</RepeaterItemTemplate>
+	<RepeaterField Context="DataType">
+		<div class="form-group row">
+			<label class="col-form-label">@nameof(DataType)</label>
+			<div class="form-control" readonly>@DataType.GetType()</div>
+		</div>
+	</RepeaterField>
+	<RepeaterField Context="Data">
+		<div class="form-group row">
+			<label class="col-form-label">@nameof(Data)</label>
+			<div class="form-control" readonly>@Data</div>
+		</div>
+	</RepeaterField>
+</Repeater>
+
+<br/>
+
+<pre><code>@(@"<Repeater Data=@Data>
+  <RepeaterTemplate Context=""ListItem"">
+    <div class=""card-columns"">@ListItem</div>
+  </RepeaterTemplate>
+  <RepeaterItemTemplate Context=""ListFields"">
+    <div class=""card border-dark mb-3"" style=""max-width: 18rem;"">
+      <div class=""card-body"">@ListFields</div>
+    </div>
+  </RepeaterItemTemplate>
+  <RepeaterField Context=""DataType"">
+    <div class=""form-group row"">
+      <label class=""col-form-label"">@nameof(DataType)</label>
+      <div class=""form-control"" readonly>@DataType.GetType()</div>
+    </div>
+  </RepeaterField>
+  <RepeaterField Context=""Data"">
+    <div class=""form-group row"">
+      <label class=""col-form-label"">@nameof(Data)</label>
+      <div class=""form-control"" readonly>@Data</div>
+    </div>
+  </RepeaterField>
+</Repeater>
+")</code></pre>

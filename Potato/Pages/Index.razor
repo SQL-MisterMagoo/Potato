@@ -1,0 +1,16 @@
+﻿@page "/"
+
+@code {
+		DateTime[] Data = Enumerable.Range(1, 3).Select(i => DateTime.Now.AddDays(i)).ToArray();
+}
+
+<h1>Simple Auto List</h1>
+
+<br/>
+
+<pre><code>@("<Repeater Data=@Data/>")</code></pre>
+
+<br/>
+
+<Repeater Data=@Data/>
+

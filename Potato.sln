@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30001.183
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Potato", "Potato\Potato.csproj", "{4311427F-18FD-4FC5-8662-A67BDF3710FD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7E4F13B6-6360-4754-8AB9-0458D2A12631}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4311427F-18FD-4FC5-8662-A67BDF3710FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4311427F-18FD-4FC5-8662-A67BDF3710FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4311427F-18FD-4FC5-8662-A67BDF3710FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4311427F-18FD-4FC5-8662-A67BDF3710FD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F3083092-2F27-4C69-8181-0CFEA2B2ED1C}
+	EndGlobalSection
+EndGlobal
