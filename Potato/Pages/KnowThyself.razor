@@ -1,0 +1,26 @@
+﻿@page "/me"
+
+@code {
+		public KnowThyself[] Data { get; set; }
+		public Repeater<KnowThyself>[] Data2 { get; set; }
+		public int Something { get; set; } = 4;
+		protected override void OnInitialized()
+		{
+			base.OnInitialized();
+			Data = new KnowThyself[] { this };
+			Data2 = new Repeater<KnowThyself>[] { new Repeater<KnowThyself>() };
+		}
+		/**/
+}
+
+<h1>Self Knowledge @Something</h1>
+
+<br/>
+
+<pre><code>@("<Repeater Data=@Data/>")</code></pre>
+
+<br/>
+
+<Repeater Data=@Data/>
+<Repeater Data=@Data2/>
+

@@ -1,35 +1,32 @@
 ﻿@typeparam T
-
-<h3>Repeater&lt;@typeof(T)&gt;(@(Data?.Count()) Data Items)</h3>
-
 @* ***** SET UP SOME DEFAULT RENDERFRAGMENTS ***** *@
 
 @{ 
-	if (RepeaterTemplate is null)
-	{
+		if (RepeaterTemplate is null)
+		{
 			RepeaterTemplate = context =>
 			@: @{ 
 				<div class="card-columns">@context</div>
 			}
-			/**/;
-	}
+/**/;
+					}
 }
 
 @{ 
-	if (RepeaterItemTemplate is null)
-	{
-		RepeaterItemTemplate = context =>
+		if (RepeaterItemTemplate is null)
+		{
+			RepeaterItemTemplate = context =>
 		@: @{ 
 			<div class="card bg-dark text-white m-1">
 				<div class="card-body">@context</div>
 			</div>
 		}
-		/**/;
-	}
+/**/;
+				}
 }
 
 @{ 
-	DefaultItem = context =>
+		DefaultItem = context =>
 		@: @{ 
 		<div class="form-group row">
 			<label class="col-form-label">@context.prop.Name</label>
@@ -39,26 +36,30 @@
 /**/;
 }
 
-@* ***** THIS IS WHERE WE RENDER THE LIST ***** *@
+@* ***** THIS IS WHERE WE RENDER THE DATA ***** *@
 
-@RepeaterTemplate(
-@: @if (Data is null)
-{
-	<p>Loading...</p>
-}
-else
-{
-	foreach (var item in Data)
+@{
+	@RepeaterTemplate(
+	@: @if (Data is null)
 	{
-		@RepeaterItemTemplate(b => {
-		 foreach (var content in _Contents)
-		 {
-			 b.AddContent(1, content(item));
-		 }
-	 })
+		<p>Loading...</p>
 	}
+	else
+	{
+		foreach (var item in Data)
+		{
+			@RepeaterItemTemplate(b =>
+			{
+				var seq = 1;
+				foreach (var content in _Contents)
+				{
+					b.AddContent(seq++, content(item));
+				}
+			})
+		}
+	}
+	)
 }
-)
 
 @* ***** THE LIST CODE - COULD GO IN CODE BEHIND BUT KEPT HERE FOR VISIBILITY ***** *@
 
@@ -93,5 +94,11 @@ else
 				}
 			}
 		}
+		protected override void OnAfterRender(bool firstRender)
+		{
+			base.OnAfterRender(firstRender);
+			// _Contents gets built every Render, so we need to clear it down after rendering.
+			_Contents.Clear();
+		}
 		/**/
-	}
+}

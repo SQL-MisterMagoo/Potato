@@ -1,42 +1,71 @@
 ﻿<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="">Potato</a>
-    <button class="navbar-toggler" @onclick="ToggleNavMenu">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+	<a class="navbar-brand" href="">Potato</a>
+	<button class="navbar-toggler" @onclick="ToggleNavMenu">
+		<span class="navbar-toggler-icon"></span>
+	</button>
 </div>
 
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <ul class="nav flex-column">
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="custom1">
-                <span class="oi oi-list" aria-hidden="true"></span> Custom Layout
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="custom2">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fully Customised
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="grid1">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Custom Grid
-            </NavLink>
-        </li>
-    </ul>
+	<Repeater @key="this" Data=Menu>
+		<RepeaterTemplate>
+			<ul class="nav flex-column">
+				@context
+			</ul>
+		</RepeaterTemplate>
+		<RepeaterItemTemplate>
+			@context
+		</RepeaterItemTemplate>
+		<RepeaterField>
+			<li class="nav-item px-3">
+				@if (string.IsNullOrWhiteSpace(context.RelativeUrl))
+				{
+				<NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+					<span class="oi oi-home" aria-hidden="true"></span> @context.MenuTitle
+				</NavLink>
+				}
+				else
+				{
+				<NavLink class="nav-link" href=@context.RelativeUrl>
+					<span class="oi oi-list-rich" aria-hidden="true"></span> @context.MenuTitle
+				</NavLink>
+				}
+			</li>
+		</RepeaterField>
+	</Repeater>
 </div>
 
+
 @code {
-    private bool collapseNavMenu = true;
+	private bool collapseNavMenu = true;
 
-    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+	private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
+	private void ToggleNavMenu()
+	{
+		collapseNavMenu = !collapseNavMenu;
+	}
+
+	List<MenuData> _Menu;
+	List<MenuData> Menu
+	{
+		get
+		{
+			if (_Menu is object)
+			{
+				return _Menu;
+			}
+			_Menu = new List<MenuData>();
+			var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+			foreach (var type in assembly.GetExportedTypes().Where(type => type.CustomAttributes.Any(attr => attr.AttributeType.Name == "RouteAttribute")))
+			{
+				foreach (var attr in type.CustomAttributes.Where(at => at.AttributeType.Name == "RouteAttribute"))
+				{
+					var url = attr.ConstructorArguments.First().Value.ToString().TrimStart('/');
+					_Menu.Add(new MenuData { RelativeUrl = url, MenuTitle = type.Name });
+				}
+			}
+			_Menu = _Menu.OrderBy(md => md.RelativeUrl).ToList<MenuData>();
+			return _Menu;
+		}
+	}
 }

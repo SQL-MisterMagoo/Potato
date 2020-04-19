@@ -5,6 +5,8 @@ using System.Text;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net.Http;
+using Potato.Shared;
+using System.Linq;
 
 namespace Potato
 {
