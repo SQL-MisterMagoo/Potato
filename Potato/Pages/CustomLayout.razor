@@ -1,4 +1,5 @@
 ﻿@page "/custom1"
+@attribute [PageTitle("Custom Layout (Auto)")]
 
 @code {
 		DateTime[] Data = Enumerable.Range(1, 3).Select(i => DateTime.Now.AddDays(i)).ToArray();

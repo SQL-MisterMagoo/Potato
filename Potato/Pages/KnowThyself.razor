@@ -1,9 +1,9 @@
 ﻿@page "/me"
+@attribute [PageTitle("Self Reflection")]
 
 @code {
 		public KnowThyself[] Data { get; set; }
 		public Repeater<KnowThyself>[] Data2 { get; set; }
-		public int Something { get; set; } = 4;
 		protected override void OnInitialized()
 		{
 			base.OnInitialized();
@@ -13,7 +13,7 @@
 		/**/
 }
 
-<h1>Self Knowledge @Something</h1>
+<h1>Self Knowledge</h1>
 
 <br/>
 

@@ -1,10 +1,11 @@
 ﻿@page "/"
+@attribute [PageTitle("Home")]
 
 @code {
 		DateTime[] Data = Enumerable.Range(1, 3).Select(i => DateTime.Now.AddDays(i)).ToArray();
 }
 
-<h1>Simple Auto List</h1>
+<h1>Simplest Repeater</h1>
 
 <br/>
 

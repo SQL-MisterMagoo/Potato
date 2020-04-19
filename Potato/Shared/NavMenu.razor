@@ -36,36 +36,50 @@
 
 
 @code {
-	private bool collapseNavMenu = true;
+		private bool collapseNavMenu = true;
 
-	private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+		private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
-	private void ToggleNavMenu()
-	{
-		collapseNavMenu = !collapseNavMenu;
-	}
-
-	List<MenuData> _Menu;
-	List<MenuData> Menu
-	{
-		get
+		private void ToggleNavMenu()
 		{
-			if (_Menu is object)
+			collapseNavMenu = !collapseNavMenu;
+		}
+
+		List<MenuData> _Menu;
+		List<MenuData> Menu
+		{
+			get
 			{
+				if (_Menu is object)
+				{
+					return _Menu;
+				}
+				_Menu = new List<MenuData>();
+				var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+				foreach (var type in 
+					assembly
+						.GetExportedTypes()
+						.Where(type => type.CustomAttributes.Any(attr => attr.AttributeType.Equals(typeof(RouteAttribute))))
+						)
+				{
+					var urlAttr = 
+						type
+							.CustomAttributes
+							.Where(at => at.AttributeType.Equals(typeof(RouteAttribute)))
+							.First();
+					var titleAttr = 
+						type
+							.CustomAttributes
+							.Where(at => at.AttributeType.Equals(typeof(PageTitleAttribute)))
+							.FirstOrDefault();
+					
+					var url = urlAttr.ConstructorArguments.First().Value.ToString().TrimStart('/');
+					var title = titleAttr?.ConstructorArguments.First().Value.ToString() ?? type.Name;
+					_Menu.Add(new MenuData { RelativeUrl = url, MenuTitle = title });
+					
+				}
+				_Menu = _Menu.OrderBy(md => md.RelativeUrl).ToList<MenuData>();
 				return _Menu;
 			}
-			_Menu = new List<MenuData>();
-			var assembly = System.Reflection.Assembly.GetExecutingAssembly();
-			foreach (var type in assembly.GetExportedTypes().Where(type => type.CustomAttributes.Any(attr => attr.AttributeType.Name == "RouteAttribute")))
-			{
-				foreach (var attr in type.CustomAttributes.Where(at => at.AttributeType.Name == "RouteAttribute"))
-				{
-					var url = attr.ConstructorArguments.First().Value.ToString().TrimStart('/');
-					_Menu.Add(new MenuData { RelativeUrl = url, MenuTitle = type.Name });
-				}
-			}
-			_Menu = _Menu.OrderBy(md => md.RelativeUrl).ToList<MenuData>();
-			return _Menu;
 		}
-	}
 }
